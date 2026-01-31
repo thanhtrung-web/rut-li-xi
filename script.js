@@ -3,13 +3,11 @@
 // ===== CẤU HÌNH QUÀ =====
 const gifts = [
     { name: "5k", quantity: 10 },
-    { name: "10k", quantity: 4 },
-    { name: "2k", quantity: 41 },
-    { name: "1 ly soda", quantity: 15 },
+    { name: "10k", quantity: 2 },
+    { name: "2k", quantity: 30 },
+    { name: "1 ly soda", quantity: 5 },
     { name: "1 phần mứt chanh dây ", quantity: 10 },
-    { name: "1 phần mứt tắc ", quantity: 10 },
-    { name: "Voucher giảm 5K tổng đơn", quantity: 5 },
-    { name: "Voucher giảm 7K tổng đơn", quantity: 5 }
+    { name: "1 phần mứt tắc ", quantity: 10 }
 ];
 
 // ===== LẤY KHO QUÀ =====
@@ -58,7 +56,7 @@ function spin() {
     setTimeout(() => {
         const result = randomGift();
 
-        resultBox.innerText = `🧧 Bạn trúng: ${result} `;//(còn ${giftPool.length} lượt)
+        resultBox.innerText = `🧧 Bạn trúng: ${result}  `;//(còn ${giftPool.length} lượt)
 
         button.disabled = false;
         isSpinning = false;
