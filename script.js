@@ -1,45 +1,70 @@
-﻿// Danh sách quà + tỉ lệ (%)
+﻿let isSpinning = false;
+
+// ===== CẤU HÌNH QUÀ =====
 const gifts = [
-    { name: "Lì Xì 2k", rate: 50},
-    { name: "Lì Xì 5k", rate: 10 },
-    { name: "Lì Xì 10k", rate: 5 },
-    { name: "Lì Xì 20k", rate: 2 },
-    { name: "1 ly soda", rate: 3 },
-    { name: "1 phần mứt chanh dây ", rate: 10 },
-    { name: "1 phần mứt mức tắc ", rate: 10 },
-    { name: "Voucher giảm 5k tổng đơn", rate: 5 },
-    { name: "Voucher giảm 7k tổng đơn", rate: 5}
+    { name: "5k", quantity: 10 },
+    { name: "10k", quantity: 4 },
+    { name: "2k", quantity: 41 },
+    { name: "1 ly soda", quantity: 15 },
+    { name: "1 phần mứt chanh dây ", quantity: 10 },
+    { name: "1 phần mứt tắc ", quantity: 10 },
+    { name: "Voucher giảm 5K tổng đơn", quantity: 5 },
+    { name: "Voucher giảm 7K tổng đơn", quantity: 5 }
 ];
 
-let isSpinning = false;
+// ===== LẤY KHO QUÀ =====
+let giftPool = JSON.parse(localStorage.getItem("giftPool"));
 
-function randomGift() {
-    const random = Math.random() * 100;
-    let total = 0;
-
-    for (let gift of gifts) {
-        total += gift.rate;
-        if (random < total) {
-            return gift.name;
+if (!giftPool) {
+    giftPool = [];
+    gifts.forEach(gift => {
+        for (let i = 0; i < gift.quantity; i++) {
+            giftPool.push(gift.name);
         }
-    }
+    });
+    localStorage.setItem("giftPool", JSON.stringify(giftPool));
 }
 
+// ===== RANDOM + TRỪ QUÀ =====
+function randomGift() {
+    if (giftPool.length === 0) return null;
+
+    const index = Math.floor(Math.random() * giftPool.length);
+    const result = giftPool[index];
+
+    giftPool.splice(index, 1);
+    localStorage.setItem("giftPool", JSON.stringify(giftPool));
+
+    return result;
+}
+
+// ===== RÚT LÌ XÌ =====
 function spin() {
-    if (isSpinning) return; // chặn spam click
+    if (isSpinning) return;
     isSpinning = true;
 
     const resultBox = document.getElementById("result");
     const button = document.querySelector("button");
 
-    resultBox.innerText = "⏳ Đang rút quà...";
+    if (giftPool.length === 0) {
+        resultBox.innerText = "🎁 Hết quà rồi!";
+        button.disabled = true;
+        return;
+    }
+
+    resultBox.innerText = "⏳ Đang rút lì xì...";
     button.disabled = true;
 
     setTimeout(() => {
         const result = randomGift();
-        resultBox.innerText = "🎉 Bạn trúng: " + result;
+
+        resultBox.innerText = `🧧 Bạn trúng: ${result} `;//(còn ${giftPool.length} lượt)
+
         button.disabled = false;
         isSpinning = false;
-    }, 1500); // giả lập chờ 1.5s
+    }, 1500);
 }
 
+
+//localStorage.removeItem("giftPool");
+//location.reload();
